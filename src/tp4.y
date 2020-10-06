@@ -4,9 +4,6 @@
 	#include <ctype.h>
 	#include <stdlib.h>
 
-	
-
-
 	int yylex();
 
 	 int yywrap(){
@@ -14,143 +11,189 @@
 		 
 	} 
    void yyerror (char const *s) {
-   fprintf(stderr, "%s\n", s);
+  		 fprintf(stderr, "hay un error \n", s);
 	}
 
 %}
+/* 	struct{
+     char cadena[50];
+     float valor;
+     int tipo;
+	}s; */
 
-%union
-{
-	int numero;
-	float numeroR;
-	char cadena[50];
+%union{
+char cadena[50];
 }
 
-
-// token -> terminales
-%token <numero> NUM_ENTERO        
-%token <numeroR> NUM_REAL        
-%token <cadena> LITERAL_CADENA    
-%token <cadena> PALABRA_RESERVADA 
-%token <cadena> TIPO_DATO        
-%token <cadena> IDENTIFICADOR  
-%token <cadena> SIZEOF 
-%token <cadena> MAS_MAS 
+%token <cadena> FOR
+%token <cadena> IF 
+%token <cadena> ELSE 
+%token <cadena> RETURN
+%token <cadena> SWITCH 
+%token <cadena> NUM
+%token <cadena> NUM_R
+%token <cadena> IDENTIFICADOR
+%token <cadena> TIPO_DATO
+%token <cadena> DO
+%token <cadena> WHILE
+%token <cadena> CHAR
+%token <cadena> LITERAL_CADENA
 %token <cadena> MAYOR_IGUAL
-%token <cadena> MENOS_IGUAL
-%token <cadena> IGUAL_IGUAL
+%token <cadena> MENOR_IGUAL
+%token <cadena> IGUALDAD
 %token <cadena> AND
 %token <cadena> OR
-%token <cadena> DISTINTO
+%token <cadena> DESIGUALDAD
+%token <cadena> CASE
+%token <cadena> BREAK
+%token <cadena> DEFAULT
+%token <cadena> MAS_IGUAL
+%token <cadena> MENOS_IGUAL
+%token <cadena> POR_IGUAL
+%token <cadena> DIVIDIDO_IGUAL
 
+%type <cadena> identificadorA
+%type <cadena> exp
+%type <cadena> sentenciaDeclaracion
+%type <cadena> listaParametros
+%type <cadena> parametro
+%type <cadena> listaIdentificadores
+%type <cadena> sentenciaReturn
 
-%left '+' '-' '*' ',' OR AND IGUAL_IGUAL DISTINTO MAYOR_IGUAL MENOR_IGUAL
-%right '=' ':' '&' '!' '(' ')' '[' ']'MAS_IGUAL MENOS_IGUAL  MAS_MAS SIZEOF
+%%
 
-
-
-%% /* A continuación las reglas gramaticales y las acciones */
-
-input:  /* vacio */
-		| input line
+input:    /* vacío */
+        | input line
 ;
 
-line:   '\n'
-		| expresion '\n'
-;
-
-expresion: expAsignacion ';'
-;
-
-expAsignacion: expCondicional
-			 | expUnaria operAsignacion expAsignacion 	{printf("se encontro una asignacion \n");}
-;
-
-operAsignacion: '='
-				|MAS_IGUAL
-				|MENOS_IGUAL
-;
-
-expCondicional: expOr
-			  | expOr expresion ':' expCondicional  	{printf("se encontro una condicion \n");}
-			  | expresion ':' expCondicional 			{printf("se encontro una condicion \n");}
-;
-
-
-
-expOr: 			expAnd
-			| expOr OR expAnd
-;
-
-expAnd: expIgualdad 
-		| expAnd AND expIgualdad
-;
-
-expIgualdad: expRelacional
-			| expIgualdad IGUAL_IGUAL expRelacional
-			| expIgualdad DISTINTO expRelacional 
-;
-
-expRelacional: expAditiva
-			 | expRelacional operadorRelacional expAditiva
+line:     '\n'
+		| listadoDeSentenciasDeDeclaracion '\n'
+		| definicionFuncion  '\n'
+		| sentenciaSwitch '\n'
+		| sentenciaWhile '\n'
+		| sentenciaFor '\n'
+		| sentenciaDoWhile '\n'
+		| sentenciaIfElse '\n'
+		| sentenciaAsignacion '\n'
+		| error '\n' { yyerrok; }
 
 ;
 
-operadorRelacional:  MAYOR_IGUAL		
-					|MENOR_IGUAL
-					|'>'
-					|'<'
+
+definicionFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametros')' '{' listadoDeSentencias '}' ';' {printf("Se ha definido una funcion \n");}
+;
+
+listadoDeSentencias: 
+					| sentenciaSwitch listadoDeSentencias
+					| sentenciaDoWhile listadoDeSentencias
+					| sentenciaFor listadoDeSentencias
+					| sentenciaWhile listadoDeSentencias
+					| sentenciaIfElse listadoDeSentencias
+					| sentenciaAsignacion listadoDeSentencias
+					| sentenciaReturn listadoDeSentencias
+					| listadoDeSentenciasDeDeclaracion listadoDeSentencias
+;
+sentenciaDoWhile: DO '{' listadoDeSentencias '}' WHILE '(' exp ')' ';' {printf( "Se ha declarado una sentencia do-while \n");}
+
+;
+sentenciaFor:	FOR  '(' sentenciaDeclaracion exp ';' identificadorA '+''+' ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
+				| FOR '(' sentenciaDeclaracion ';' exp ';' identificadorA '-''-' ')' '{' listadoDeSentencias '}' {printf("Se ha declarado una sentencia for\n")}
+;
+
+
+
+sentenciaIfElse: IF '(' exp ')' '{' listadoDeSentencias '}' {printf ("Se declaro un if \n");} sentenciaElse
+;
+
+sentenciaElse:
+				| ELSE '{' listadoDeSentencias '}' {printf ("Se declaron un else \n");}
+;
+
+sentenciaWhile: WHILE '(' exp ')' '{' listadoDeSentencias '}' {printf ("Se declaro un while \n");}
+
+;
+
+sentenciaSwitch:
+				| SWITCH '(' exp ')' '{' sentenciaCase '}' {printf ("Se declaro un switch \n");}
+
+;
+
+sentenciaCase:
+				| CASE exp ':' listadoDeSentencias BREAK ';' {printf ("Se declaro un case \n");}
+				| sentenciaCase DEFAULT ':' listadoDeSentencias {printf ("Se declaro el default \n");}
+;
+
+sentenciaReturn: 
+				|RETURN exp ';'
+;
+
+listadoDeSentenciasDeDeclaracion:
+									| sentenciaDeclaracion
+									| sentenciaDeclaracion ';' listadoDeSentenciasDeDeclaracion 
+;
+
+sentenciaDeclaracion:	TIPO_DATO IDENTIFICADOR ';'				  {printf ("Se declaro una variable \n");}
+						| TIPO_DATO listaIdentificadores ';'      
+						| TIPO_DATO IDENTIFICADOR '[' exp ']' ';' {printf ("Se declaro un arreglo \n");}
+						| TIPO_DATO '*' IDENTIFICADOR';'          {printf ("Se declaro un puntero \n");}
+						| TIPO_DATO IDENTIFICADOR '(' listaParametros')' ';'    {printf ("Se declaro un prototipo de función \n");}
+; 
+
+sentenciaAsignacion: parametro '=' exp ';' 
+					|parametro MAS_IGUAL exp ';'
+					|parametro MENOS_IGUAL exp ';' 
+					|parametro POR_IGUAL exp ';' 
+					|parametro DIVIDIDO_IGUAL exp ';' 
 					
+
 ;
 
+parametro:
+			| TIPO_DATO IDENTIFICADOR
+			| IDENTIFICADOR 
 
-expAditiva: expMultiplicativa	
-			|expAditiva operadorAditivo expMultiplicativa
 ;
 
+listaIdentificadores: 	  identificadorA
+						| listaIdentificadores ',' identificadorA 
+						
 
-operadorAditivo: '+'
-				| '-'
 ;
 
-expMultiplicativa: expUnaria
-				   | expMultiplicativa operadorMultiplicativo expUnaria
+identificadorA:		  IDENTIFICADOR 						{printf ("Se declaró una variable \n");}
+					| IDENTIFICADOR '=' exp 				{printf ("Se declaró una variable y se le asignó un valor \n");}
+					               
+
 ;
 
-operadorMultiplicativo: '*'
-						| '/'
+listaParametros:  TIPO_DATO
+				| TIPO_DATO ',' listaParametros
+				|TIPO_DATO IDENTIFICADOR
+				|TIPO_DATO IDENTIFICADOR ',' listaParametros
+
 ;
 
-expUnaria: expPostFijo
-			| MAS_MAS expUnaria
-			| operUnario expUnaria
-			| SIZEOF '(' TIPO_DATO ')'
+exp: 
+			| LITERAL_CADENA
+			| IDENTIFICADOR
+			| CHAR
+			| exp '-' exp                   
+			| exp '>' exp                   
+			| exp '<' exp                   
+			| exp IGUALDAD exp		        
+			| exp MAYOR_IGUAL exp           
+			| exp MENOR_IGUAL exp           
+			| exp DESIGUALDAD exp          
+			| exp AND exp                   
+			| exp OR exp                    
+			| NUM 
+			| NUM_R
+			| exp '*' exp                   
+			| exp '/' exp                   
+			| exp '+' exp                   
+			
 ;
 
-
-operUnario: '&'
-			| '*'
-			| '-'
-			| '!'
-;
-
-expPostFijo: expPrimaria
-			| expPostFijo '[' expresion ']'
-			| expPostFijo '(' listaArgumentos ')' {printf("se encontro una declaracion de funcion \n");}
-			| expPostFijo '('')' 
-;
-
-listaArgumentos: expAsignacion
-				| listaArgumentos ',' expAsignacion
-;
-
-expPrimaria:  IDENTIFICADOR 	
-			 | NUM_ENTERO		
-			 | NUM_REAL			
-			 | LITERAL_CADENA 	
-			 | PALABRA_RESERVADA 
-			 | TIPO_DATO		
-;
 
 
 %%

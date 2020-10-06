@@ -1,0 +1,66 @@
+Gramática
+
+    0 $accept: expresion $end
+
+    1 expresion: TIPO_DATO IDENTIFICADOR ';'
+
+
+Terminales con las reglas donde aparecen
+
+$end (0) 0
+';' (59) 1
+error (256)
+TIPO_DATO (258) 1
+IDENTIFICADOR (259) 1
+
+
+No terminales con las reglas donde aparecen
+
+$accept (6)
+    en la izquierda: 0
+expresion (7)
+    en la izquierda: 1, en la derecha: 0
+
+
+estado 0
+
+    0 $accept: . expresion $end
+
+    TIPO_DATO  desplazar e ir al estado 1
+
+    expresion  ir al estado 2
+
+
+estado 1
+
+    1 expresion: TIPO_DATO . IDENTIFICADOR ';'
+
+    IDENTIFICADOR  desplazar e ir al estado 3
+
+
+estado 2
+
+    0 $accept: expresion . $end
+
+    $end  desplazar e ir al estado 4
+
+
+estado 3
+
+    1 expresion: TIPO_DATO IDENTIFICADOR . ';'
+
+    ';'  desplazar e ir al estado 5
+
+
+estado 4
+
+    0 $accept: expresion $end .
+
+    $default  aceptar
+
+
+estado 5
+
+    1 expresion: TIPO_DATO IDENTIFICADOR ';' .
+
+    $default  reduce usando la regla 1 (expresion)
