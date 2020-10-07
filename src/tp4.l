@@ -26,12 +26,14 @@ char|int|float|double|void|struct|bool       { strcpy(yylval.cadena, yytext); re
 (\'[a-zA-Z]\')                               { strcpy(yylval.cadena, yytext); return CHAR;}
 [a-zA-Z_]([a-zA-Z_]|[0-9])*                  { strcpy(yylval.cadena, yytext); return IDENTIFICADOR; }
 ">="										 { strcpy(yylval.cadena, yytext); return MAYOR_IGUAL;}
-"(<=)"										 { strcpy(yylval.cadena, yytext); return MENOR_IGUAL;}
+"<="										 { strcpy(yylval.cadena, yytext); return MENOR_IGUAL;}
 "=="										 { strcpy(yylval.cadena, yytext); return IGUALDAD;}
 "&&"									     { strcpy(yylval.cadena, yytext); return AND;}
 "||"										 { strcpy(yylval.cadena, yytext); return OR;}
 "!="										 { strcpy(yylval.cadena, yytext); return DESIGUALDAD;}
 \"([ -!#-~]|\\\")*\"			 			 { strcpy(yylval.cadena, yytext); return  LITERAL_CADENA;}
+"++"                                          { strcpy(yylval.cadena, yytext); return  MAS_MAS;}
+"--"                                          { strcpy(yylval.cadena, yytext); return  MENOS_MENOS;}
 ","     { return ','; }
 "="     { return '='; }
 ";"     { return ';'; }
@@ -52,7 +54,7 @@ char|int|float|double|void|struct|bool       { strcpy(yylval.cadena, yytext); re
 ">"     { return '>'; }
 "!"     { return '!'; }
 ":"		{ return ':'; }
-"\n"    { return '\n'; }
+"\n"    { return '\n';}
 
 
 %%

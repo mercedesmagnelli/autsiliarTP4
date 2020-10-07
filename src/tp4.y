@@ -51,7 +51,12 @@ char cadena[50];
 %token <cadena> MENOS_IGUAL
 %token <cadena> POR_IGUAL
 %token <cadena> DIVIDIDO_IGUAL
+%token <cadena> MAS_MAS
+%token <cadena> MENOS_MENOS
 
+%type <cadena> saltoOpcional
+%type <cadena> auxi
+%type <cadena> expC
 %type <cadena> identificadorA
 %type <cadena> exp
 %type <cadena> sentenciaDeclaracion
@@ -66,16 +71,20 @@ input:    /* vacío */
         | input line
 ;
 
+saltoOpcional: /* vacío */
+		 	   | '\n'
+;
+
 line:     '\n'
-		| listadoDeSentenciasDeDeclaracion '\n'
-		| definicionFuncion  '\n'
-		| sentenciaSwitch '\n'
-		| sentenciaWhile '\n'
-		| sentenciaFor '\n'
-		| sentenciaDoWhile '\n'
-		| sentenciaIfElse '\n'
-		| sentenciaAsignacion '\n'
-		| error '\n' { yyerrok; }
+		| listadoDeSentenciasDeDeclaracion saltoOpcional
+		| definicionFuncion  saltoOpcional
+		| sentenciaSwitch saltoOpcional
+		| sentenciaWhile saltoOpcional
+		| sentenciaFor saltoOpcional
+		| sentenciaDoWhile saltoOpcional
+		| sentenciaIfElse saltoOpcional
+		| sentenciaAsignacion saltoOpcional
+		| error saltoOpcional { yyerrok; }
 
 ;
 
@@ -83,7 +92,7 @@ line:     '\n'
 definicionFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametros')' '{' listadoDeSentencias '}' ';' {printf("Se ha definido una funcion \n");}
 ;
 
-listadoDeSentencias: 
+listadoDeSentencias: saltoOpcional
 					| sentenciaSwitch listadoDeSentencias
 					| sentenciaDoWhile listadoDeSentencias
 					| sentenciaFor listadoDeSentencias
@@ -105,7 +114,7 @@ sentenciaFor:	FOR  '(' sentenciaDeclaracion exp ';' identificadorA '+''+' ')' '{
 sentenciaIfElse: IF '(' exp ')' '{' listadoDeSentencias '}' {printf ("Se declaro un if \n");} sentenciaElse
 ;
 
-sentenciaElse:
+sentenciaElse: 	/* vacío */
 				| ELSE '{' listadoDeSentencias '}' {printf ("Se declaron un else \n");}
 ;
 
@@ -113,31 +122,36 @@ sentenciaWhile: WHILE '(' exp ')' '{' listadoDeSentencias '}' {printf ("Se decla
 
 ;
 
-sentenciaSwitch:
+sentenciaSwitch: /* vacío */
 				| SWITCH '(' exp ')' '{' sentenciaCase '}' {printf ("Se declaro un switch \n");}
 
 ;
 
-sentenciaCase:
+sentenciaCase:  /* vacío */
 				| CASE exp ':' listadoDeSentencias BREAK ';' {printf ("Se declaro un case \n");}
 				| sentenciaCase DEFAULT ':' listadoDeSentencias {printf ("Se declaro el default \n");}
 ;
 
-sentenciaReturn: 
+sentenciaReturn: /* vacío */
 				|RETURN exp ';'
 ;
 
-listadoDeSentenciasDeDeclaracion:
+listadoDeSentenciasDeDeclaracion:	/* vacío */
 									| sentenciaDeclaracion
 									| sentenciaDeclaracion ';' listadoDeSentenciasDeDeclaracion 
 ;
 
-sentenciaDeclaracion:	TIPO_DATO IDENTIFICADOR ';'				  {printf ("Se declaro una variable \n");}
-						| TIPO_DATO listaIdentificadores ';'      
-						| TIPO_DATO IDENTIFICADOR '[' exp ']' ';' {printf ("Se declaro un arreglo \n");}
-						| TIPO_DATO '*' IDENTIFICADOR';'          {printf ("Se declaro un puntero \n");}
-						| TIPO_DATO IDENTIFICADOR '(' listaParametros')' ';'    {printf ("Se declaro un prototipo de función \n");}
+sentenciaDeclaracion: 	TIPO_DATO IDENTIFICADOR ';'				  {printf ("Se declaro una variable de tipo %s llamada %s \n", $<cadena>1,$<cadena>2);} 
+						| TIPO_DATO listaIdentificadores       
+						| TIPO_DATO IDENTIFICADOR '[' expC ']' ';' {printf ("Se declaro un arreglo de tipo %s llamado %s \n",$<cadena>1,$<cadena>2);}
+						| TIPO_DATO IDENTIFICADOR '[' expC ']' '=' '{' auxi '}' ';' {printf ("Se declaro y se asignaron valores a las posiciones de un arreglo de tipo %s llamado %s \n",$<cadena>1,$<cadena>2);}
+						| TIPO_DATO '*' IDENTIFICADOR ';'          {printf ("Se declaro un puntero \n");}
+						| TIPO_DATO IDENTIFICADOR '(' listaParametros ')' ';'    {printf ("Se declaro un prototipo de funcion \n");}
 ; 
+
+auxi: expC ',' auxi 
+	| expC 
+;
 
 sentenciaAsignacion: parametro '=' exp ';' 
 					|parametro MAS_IGUAL exp ';'
@@ -148,8 +162,7 @@ sentenciaAsignacion: parametro '=' exp ';'
 
 ;
 
-parametro:
-			| TIPO_DATO IDENTIFICADOR
+parametro:	 TIPO_DATO IDENTIFICADOR
 			| IDENTIFICADOR 
 
 ;
@@ -160,9 +173,12 @@ listaIdentificadores: 	  identificadorA
 
 ;
 
-identificadorA:		  IDENTIFICADOR 						{printf ("Se declaró una variable \n");}
-					| IDENTIFICADOR '=' exp 				{printf ("Se declaró una variable y se le asignó un valor \n");}
-					               
+identificadorA:		 IDENTIFICADOR ';'				    	{printf ("Se declaro una variable llamada %s \n",$<cadena>1);}
+					| IDENTIFICADOR '=' exp';'			    {printf ("Se declaro una variable llamada %s y se le asigno el valor %s \n",$<cadena>1,$<cadena>3);}
+					|IDENTIFICADOR MAS_IGUAL exp ';'		{printf ("Se declaro una variable llamada %s y se le asigno el valor %s \n",$<cadena>1,$<cadena>3);}
+					|IDENTIFICADOR MENOS_IGUAL exp ';' 		{printf ("Se declaro una variable llamada %s y se le asigno el valor %s \n",$<cadena>1,$<cadena>3);}
+					|IDENTIFICADOR POR_IGUAL exp ';' 		{printf ("Se declaro una variable llamada %s y se le asigno el valor %s \n",$<cadena>1,$<cadena>3);}
+					|IDENTIFICADOR DIVIDIDO_IGUAL exp ';' 	{printf ("Se declaro una variable llamada %s y se le asigno el valor %s \n",$<cadena>1,$<cadena>3);}
 
 ;
 
@@ -173,26 +189,32 @@ listaParametros:  TIPO_DATO
 
 ;
 
-exp: 
-			| LITERAL_CADENA
-			| IDENTIFICADOR
-			| CHAR
-			| exp '-' exp                   
-			| exp '>' exp                   
-			| exp '<' exp                   
-			| exp IGUALDAD exp		        
-			| exp MAYOR_IGUAL exp           
-			| exp MENOR_IGUAL exp           
-			| exp DESIGUALDAD exp          
-			| exp AND exp                   
-			| exp OR exp                    
-			| NUM 
-			| NUM_R
-			| exp '*' exp                   
-			| exp '/' exp                   
-			| exp '+' exp                   
+			
+exp: 		| LITERAL_CADENA
+			| expC         
 			
 ;
+
+expC:		IDENTIFICADOR
+			| CHAR
+			| expC '-' expC           {printf ("Se escribio una expresion usando una resta \n");}         
+			| expC '>' expC           {printf ("Se escribio una expresion con signo de desigualdad \n");}         
+			| expC '<' expC           {printf ("Se escribio una expresion con signo de desigualdad \n");}         
+			| expC IGUALDAD expC	  {printf ("Se escribio una expresion con signo de igualdad \n");}          
+			| expC MAYOR_IGUAL expC   {printf ("Se escribio una expresion con signo de desigualdad \n");}          
+			| expC MENOR_IGUAL expC   {printf ("Se escribio una expresion con signo de desigualdad \n");}          
+			| expC DESIGUALDAD expC   {printf ("Se escribio una expresion con signo de distinto \n");}          
+			| expC AND expC       	  {printf ("Se escribio una expresion con la operacion logica and \n");}             
+			| expC OR expC         	  {printf ("Se escribio una expresion con la operacion logica or \n");}             
+			| NUM 
+			| NUM_R
+			| expC '*' expC       	  {printf ("Se escribio una expresion  \n");}              
+			| expC '/' expC           {printf ("Se escribio una expresion  \n");}              
+			| expC '+' expC           {printf ("Se escribio una expresion  \n");}  
+
+;
+
+
 
 
 
