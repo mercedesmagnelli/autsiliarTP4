@@ -33,7 +33,7 @@ char|int|float|double|void|struct|bool       { strcpy(yylval.cadena, yytext); re
 "!="										 { strcpy(yylval.cadena, yytext); return DESIGUALDAD;}
 \"([ -!#-~]|\\\")*\"			 			 { strcpy(yylval.cadena, yytext); return LITERAL_CADENA;}
 ","     { return ','; }
-"="     { return ','; }
+"="     { return '='; }
 ";"     { return ';'; }
 "+"     { return '+'; }
 "-"     { return '-'; }
