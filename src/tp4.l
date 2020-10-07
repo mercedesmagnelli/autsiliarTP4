@@ -31,7 +31,7 @@ char|int|float|double|void|struct|bool       { strcpy(yylval.cadena, yytext); re
 "&&"									     { strcpy(yylval.cadena, yytext); return AND;}
 "||"										 { strcpy(yylval.cadena, yytext); return OR;}
 "!="										 { strcpy(yylval.cadena, yytext); return DESIGUALDAD;}
-\"([ -!#-~]|\\\")*\"			 			 { strcpy(yylval.cadena, yytext); return LITERAL_CADENA;}
+\"([ -!#-~]|\\\")*\"			 			 { strcpy(yylval.cadena, yytext); return  LITERAL_CADENA;}
 ","     { return ','; }
 "="     { return '='; }
 ";"     { return ';'; }
