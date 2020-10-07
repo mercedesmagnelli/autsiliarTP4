@@ -54,7 +54,7 @@ char cadena[50];
 %token <cadena> MAS_MAS
 %token <cadena> MENOS_MENOS
 
-%type <cadena> saltoOpcional
+%type <cadena> incrementoDecremento
 %type <cadena> auxi
 %type <cadena> expC
 %type <cadena> identificadorA
@@ -70,29 +70,27 @@ char cadena[50];
 input:    /* vacío */
         | input line
 ;
-
-saltoOpcional: /* vacío */
-		 	   | '\n'
-;
+ 
 
 line:     '\n'
-		| listadoDeSentenciasDeDeclaracion saltoOpcional
-		| definicionFuncion  saltoOpcional
-		| sentenciaSwitch saltoOpcional
-		| sentenciaWhile saltoOpcional
-		| sentenciaFor saltoOpcional
-		| sentenciaDoWhile saltoOpcional
-		| sentenciaIfElse saltoOpcional
-		| sentenciaAsignacion saltoOpcional
-		| error saltoOpcional { yyerrok; }
+		| listadoDeSentenciasDeDeclaracion '\n'
+		| definicionFuncion  '\n'
+		| sentenciaSwitch '\n'
+		| sentenciaWhile '\n'
+		| sentenciaFor '\n'
+		| sentenciaDoWhile '\n'
+		| sentenciaIfElse '\n'
+		| sentenciaAsignacion '\n'
+		| incrementoDecremento '\n'
+		| error '\n' { yyerrok; }
 
 ;
 
 
-definicionFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametros')' '{' listadoDeSentencias '}' ';' {printf("Se ha definido una funcion \n");}
+definicionFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametros')' '{' listadoDeSentencias '}' ';' {printf("Se ha definido una funcion de tipo %s llamada %s \n",$<cadena>1,$<cadena>2);}
 ;
 
-listadoDeSentencias: saltoOpcional
+listadoDeSentencias: /* vacio */
 					| sentenciaSwitch listadoDeSentencias
 					| sentenciaDoWhile listadoDeSentencias
 					| sentenciaFor listadoDeSentencias
@@ -101,15 +99,24 @@ listadoDeSentencias: saltoOpcional
 					| sentenciaAsignacion listadoDeSentencias
 					| sentenciaReturn listadoDeSentencias
 					| listadoDeSentenciasDeDeclaracion listadoDeSentencias
+					| incrementoDecremento listadoDeSentencias
+
 ;
 sentenciaDoWhile: DO '{' listadoDeSentencias '}' WHILE '(' exp ')' ';' {printf( "Se ha declarado una sentencia do-while \n");}
 
 ;
-sentenciaFor:	FOR  '(' sentenciaDeclaracion exp ';' identificadorA '+''+' ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
-				| FOR '(' sentenciaDeclaracion ';' exp ';' identificadorA '-''-' ')' '{' listadoDeSentencias '}' {printf("Se ha declarado una sentencia for\n")}
+sentenciaFor:	FOR  '(' sentenciaDecOAsig ';' expC ';' IDENTIFICADOR MAS_MAS ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
+				FOR  '(' sentenciaDecOAsig ';' expC ';' IDENTIFICADOR MENOS_MENOS ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
+;
+
+sentenciaDecOAsig: sentenciaAsignacion
+				   sentenciaDeclaracion
 ;
 
 
+incrementoDecremento: IDENTIFICADOR MAS_MAS ';'  		 {printf("Se ha incrementado la variable %s \n",$<cadena>1);}
+					  |IDENTIFICADOR MENOS_MENOS ';'     {printf("Se ha decrementado la variable %s\n",$<cadena>1);}
+;
 
 sentenciaIfElse: IF '(' exp ')' '{' listadoDeSentencias '}' {printf ("Se declaro un if \n");} sentenciaElse
 ;
@@ -146,7 +153,7 @@ sentenciaDeclaracion: 	TIPO_DATO IDENTIFICADOR ';'				  {printf ("Se declaro una
 						| TIPO_DATO IDENTIFICADOR '[' expC ']' ';' {printf ("Se declaro un arreglo de tipo %s llamado %s \n",$<cadena>1,$<cadena>2);}
 						| TIPO_DATO IDENTIFICADOR '[' expC ']' '=' '{' auxi '}' ';' {printf ("Se declaro y se asignaron valores a las posiciones de un arreglo de tipo %s llamado %s \n",$<cadena>1,$<cadena>2);}
 						| TIPO_DATO '*' IDENTIFICADOR ';'          {printf ("Se declaro un puntero \n");}
-						| TIPO_DATO IDENTIFICADOR '(' listaParametros ')' ';'    {printf ("Se declaro un prototipo de funcion \n");}
+						| TIPO_DATO IDENTIFICADOR '(' listaParametros ')' ';'    {printf ("Se declaro un prototipo de una funcion de tipo %s llamada %s \n",  $<cadena>1, $<cadena>2);}
 ; 
 
 auxi: expC ',' auxi 
@@ -174,7 +181,7 @@ listaIdentificadores: 	  identificadorA
 ;
 
 identificadorA:		 IDENTIFICADOR ';'				    	{printf ("Se declaro una variable llamada %s \n",$<cadena>1);}
-					| IDENTIFICADOR '=' exp';'			    {printf ("Se declaro una variable llamada %s y se le asigno el valor %s \n",$<cadena>1,$<cadena>3);}
+					|IDENTIFICADOR '=' exp';'			    {printf ("Se declaro una variable llamada %s y se le asigno el valor %s \n",$<cadena>1,$<cadena>3);}
 					|IDENTIFICADOR MAS_IGUAL exp ';'		{printf ("Se declaro una variable llamada %s y se le asigno el valor %s \n",$<cadena>1,$<cadena>3);}
 					|IDENTIFICADOR MENOS_IGUAL exp ';' 		{printf ("Se declaro una variable llamada %s y se le asigno el valor %s \n",$<cadena>1,$<cadena>3);}
 					|IDENTIFICADOR POR_IGUAL exp ';' 		{printf ("Se declaro una variable llamada %s y se le asigno el valor %s \n",$<cadena>1,$<cadena>3);}
