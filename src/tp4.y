@@ -114,8 +114,8 @@ listadoDeSentencias: /* vacio */
 sentenciaDoWhile: DO '{' listadoDeSentencias '}' WHILE '(' exp ')' ';' {printf( "Se ha declarado una sentencia do-while \n");}
 
 ;
-sentenciaFor:	FOR  '(' sentenciaDecOAsig  expC ';' IDENTIFICADOR MAS_MAS ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
-			|  FOR  '(' sentenciaDecOAsig  expC ';' IDENTIFICADOR MENOS_MENOS ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
+sentenciaFor:	FOR  '(' sentenciaDecOAsig  expC ';' incrementoParaFor ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
+
 ;
 
 sentenciaDecOAsig: sentenciaAsignacion
@@ -123,9 +123,15 @@ sentenciaDecOAsig: sentenciaAsignacion
 ;
 
 
+incrementoParaFor: IDENTIFICADOR MAS_MAS       {printf("Se ha incrementado la variable %s \n",$<cadena>1);}
+				  |	IDENTIFICADOR MENOS_MENOS  {printf("Se ha decrementado la variable %s\n",$<cadena>1);}
+;
+
+
 incrementoDecremento: IDENTIFICADOR MAS_MAS ';'  		 {printf("Se ha incrementado la variable %s \n",$<cadena>1);}
 					  |IDENTIFICADOR MENOS_MENOS ';'     {printf("Se ha decrementado la variable %s\n",$<cadena>1);}
 ;
+
 
 sentenciaIfElse: IF '(' exp ')' '{' listadoDeSentencias '}' {printf ("Se declaro un if \n");} sentenciaElse
 ;
