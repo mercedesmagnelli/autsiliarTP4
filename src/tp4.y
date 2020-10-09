@@ -175,11 +175,11 @@ auxi: expC ',' auxi
 	| expC 
 ;
 
-sentenciaAsignacion: parametro '=' exp ';' 
-					|parametro MAS_IGUAL exp ';'
-					|parametro MENOS_IGUAL exp ';' 
-					|parametro POR_IGUAL exp ';' 
-					|parametro DIVIDIDO_IGUAL exp ';' 
+sentenciaAsignacion: parametro '=' exp ';'  {printf ("Se le asigno  %s y se le asigno el valor %s \n",$<cadena>1,$<cadena>3);}
+					|parametro MAS_IGUAL exp ';' {printf ("Se le asigno  %s y se le asigno su valor mas %s \n",$<cadena>1,$<cadena>3);}
+					|parametro MENOS_IGUAL exp ';'  {printf ("Se le asigno  %s y se le asigno su valor menos %s \n",$<cadena>1,$<cadena>3);}
+					|parametro POR_IGUAL exp ';'   {printf ("Se le asigno  %s y se le asigno su valor por %s \n",$<cadena>1,$<cadena>3);}
+					|parametro DIVIDIDO_IGUAL exp ';'  {printf ("Se le asigno  %s y se le asigno su valor dividido %s \n",$<cadena>1,$<cadena>3);}
 					
 
 ;
