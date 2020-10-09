@@ -1,4 +1,5 @@
 %{ /* seccion de definiciones */
+
 	#include <stdio.h>
 	#include <math.h>
 	#include <ctype.h>
@@ -13,10 +14,7 @@
 
 	int yylex();
 
-	 int yywrap(){
-		return(1);
-		 
-	} 
+	
    
 
 %}
@@ -60,6 +58,7 @@ char cadena[50];
 %token <cadena> MENOS_MENOS
 
 
+
 %type <cadena> incrementoDecremento
 %type <cadena> auxi
 %type <cadena> expC
@@ -73,12 +72,13 @@ char cadena[50];
 
 %%
 
+
+
 input:    /* vacío */
         | input line
 ;
- 
 
-line:   
+line:   '\n'      
 		| listadoDeSentenciasDeDeclaracion saltoOpcional
 		| definicionFuncion  saltoOpcional
 		| sentenciaSwitch saltoOpcional
@@ -93,7 +93,7 @@ line:
 ;
 //lo agregamos para ver si se solucionaba el problema de los saltos de linea pero no funciona
  
-saltoOpcional:  '\n' saltoOpcional
+saltoOpcional:  /* vacio */
 				| '\n'
 ;
 definicionFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametros')' '{' listadoDeSentencias '}' ';' {printf("Se ha definido una funcion de tipo %s llamada %s \n",$<cadena>1,$<cadena>2);}
@@ -109,7 +109,7 @@ listadoDeSentencias: /* vacio */
 					| sentenciaReturn listadoDeSentencias
 					| listadoDeSentenciasDeDeclaracion listadoDeSentencias
 					| incrementoDecremento listadoDeSentencias
-
+					| '\n' listadoDeSentencias
 ;
 sentenciaDoWhile: DO '{' listadoDeSentencias '}' WHILE '(' exp ')' ';' {printf( "Se ha declarado una sentencia do-while \n");}
 

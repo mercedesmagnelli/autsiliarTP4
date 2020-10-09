@@ -1,7 +1,13 @@
 %{
+
+  
 #include "tp4.tab.h"
 #include <string.h>
 #include <stdlib.h>
+
+
+
+
 %}
 
 
@@ -59,3 +65,4 @@ char|int|float|double|void|struct|bool       { strcpy(yylval.cadena, yytext); re
 
 
 %%
+
