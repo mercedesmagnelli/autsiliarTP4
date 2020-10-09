@@ -6,6 +6,7 @@
 
 
 %%
+
 "+="										 { strcpy(yylval.cadena, yytext); return MAS_IGUAL;}
 "-="										 { strcpy(yylval.cadena, yytext); return MENOS_IGUAL;}
 "*="										 { strcpy(yylval.cadena, yytext); return POR_IGUAL;}

@@ -3,6 +3,13 @@
 	#include <math.h>
 	#include <ctype.h>
 	#include <stdlib.h>
+	#include <string.h>
+	extern FILE* yyin; 
+
+
+	void yyerror (char const *s) {
+  		 fprintf(stderr, "hay un error \n", s);
+	}
 
 	int yylex();
 
@@ -10,9 +17,7 @@
 		return(1);
 		 
 	} 
-   void yyerror (char const *s) {
-  		 fprintf(stderr, "hay un error \n", s);
-	}
+   
 
 %}
 /* 	struct{
@@ -54,6 +59,7 @@ char cadena[50];
 %token <cadena> MAS_MAS
 %token <cadena> MENOS_MENOS
 
+
 %type <cadena> incrementoDecremento
 %type <cadena> auxi
 %type <cadena> expC
@@ -72,26 +78,29 @@ input:    /* vacío */
 ;
  
 
-line:     '\n'
-		| listadoDeSentenciasDeDeclaracion '\n'
-		| definicionFuncion  '\n'
-		| sentenciaSwitch '\n'
-		| sentenciaWhile '\n'
-		| sentenciaFor '\n'
-		| sentenciaDoWhile '\n'
-		| sentenciaIfElse '\n'
-		| sentenciaAsignacion '\n'
-		| incrementoDecremento '\n'
-		| error '\n' { yyerrok; }
+line:   
+		| listadoDeSentenciasDeDeclaracion saltoOpcional
+		| definicionFuncion  saltoOpcional
+		| sentenciaSwitch saltoOpcional
+		| sentenciaWhile saltoOpcional
+		| sentenciaFor saltoOpcional
+		| sentenciaDoWhile saltoOpcional
+		| sentenciaIfElse saltoOpcional
+		| sentenciaAsignacion saltoOpcional
+		| incrementoDecremento saltoOpcional
+		| error saltoOpcional { yyerrok; }
 
 ;
-
-
+//lo agregamos para ver si se solucionaba el problema de los saltos de linea pero no funciona
+ 
+saltoOpcional:  '\n' saltoOpcional
+				| '\n'
+;
 definicionFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametros')' '{' listadoDeSentencias '}' ';' {printf("Se ha definido una funcion de tipo %s llamada %s \n",$<cadena>1,$<cadena>2);}
 ;
 
 listadoDeSentencias: /* vacio */
-					| sentenciaSwitch listadoDeSentencias
+					| sentenciaSwitch listadoDeSentencias 
 					| sentenciaDoWhile listadoDeSentencias
 					| sentenciaFor listadoDeSentencias
 					| sentenciaWhile listadoDeSentencias
@@ -105,12 +114,12 @@ listadoDeSentencias: /* vacio */
 sentenciaDoWhile: DO '{' listadoDeSentencias '}' WHILE '(' exp ')' ';' {printf( "Se ha declarado una sentencia do-while \n");}
 
 ;
-sentenciaFor:	FOR  '(' sentenciaDecOAsig ';' expC ';' IDENTIFICADOR MAS_MAS ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
-				FOR  '(' sentenciaDecOAsig ';' expC ';' IDENTIFICADOR MENOS_MENOS ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
+sentenciaFor:	FOR  '(' sentenciaDecOAsig  expC ';' IDENTIFICADOR MAS_MAS ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
+			|  FOR  '(' sentenciaDecOAsig  expC ';' IDENTIFICADOR MENOS_MENOS ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
 ;
 
 sentenciaDecOAsig: sentenciaAsignacion
-				   sentenciaDeclaracion
+				|  sentenciaDeclaracion
 ;
 
 
@@ -125,7 +134,7 @@ sentenciaElse: 	/* vacío */
 				| ELSE '{' listadoDeSentencias '}' {printf ("Se declaron un else \n");}
 ;
 
-sentenciaWhile: WHILE '(' exp ')' '{' listadoDeSentencias '}' {printf ("Se declaro un while \n");}
+sentenciaWhile: WHILE '(' exp ')' '\n' '{'  listadoDeSentencias '}' {printf ("Se declaro un while \n");}
 
 ;
 
@@ -140,7 +149,7 @@ sentenciaCase:  /* vacío */
 ;
 
 sentenciaReturn: /* vacío */
-				|RETURN exp ';'
+				|RETURN exp ';' {printf ("Se declaro un return");}
 ;
 
 listadoDeSentenciasDeDeclaracion:	/* vacío */
@@ -197,7 +206,7 @@ listaParametros:  TIPO_DATO
 ;
 
 			
-exp: 		| LITERAL_CADENA
+exp: 		LITERAL_CADENA
 			| expC         
 			
 ;
@@ -227,11 +236,19 @@ expC:		IDENTIFICADOR
 
 %%
 
-void main ()
+int main ()
 {
+
+	yyin=fopen("entrada.c","r");
+ 
+   	yyparse();
+ 
+	
 	#ifdef BISON_DEBUG
         yydebug = 1;
 	#endif
-	yyparse();
+	fclose(yyin);
 	system("pause");
+	return 0;
+
 }

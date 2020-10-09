@@ -39,8 +39,34 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     TIPO_DATO = 258,
-     IDENTIFICADOR = 259
+     FOR = 258,
+     IF = 259,
+     ELSE = 260,
+     RETURN = 261,
+     SWITCH = 262,
+     NUM = 263,
+     NUM_R = 264,
+     IDENTIFICADOR = 265,
+     TIPO_DATO = 266,
+     DO = 267,
+     WHILE = 268,
+     CHAR = 269,
+     LITERAL_CADENA = 270,
+     MAYOR_IGUAL = 271,
+     MENOR_IGUAL = 272,
+     IGUALDAD = 273,
+     AND = 274,
+     OR = 275,
+     DESIGUALDAD = 276,
+     CASE = 277,
+     BREAK = 278,
+     DEFAULT = 279,
+     MAS_IGUAL = 280,
+     MENOS_IGUAL = 281,
+     POR_IGUAL = 282,
+     DIVIDIDO_IGUAL = 283,
+     MAS_MAS = 284,
+     MENOS_MENOS = 285
    };
 #endif
 
@@ -51,14 +77,14 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 9 "../src/tp4.y"
+#line 29 "../src/tp4.y"
 
-	char cadena[50];
+char cadena[50];
 
 
 
 /* Line 1676 of yacc.c  */
-#line 62 "tp4.tab.h"
+#line 88 "tp4.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
