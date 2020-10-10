@@ -56,7 +56,7 @@ char cadena[50];
 %token <cadena> DIVIDIDO_IGUAL
 %token <cadena> MAS_MAS
 %token <cadena> MENOS_MENOS
-
+%token <mystruct> error
 
 
 %type <cadena> incrementoDecremento
@@ -78,7 +78,8 @@ input:    /* vacío */
         | input line
 ;
 
-line:   '\n'      
+line:   
+		|'\n'      
 		| listadoDeSentenciasDeDeclaracion saltoOpcional
 		| definicionFuncion  saltoOpcional
 		| sentenciaSwitch saltoOpcional
@@ -93,10 +94,12 @@ line:   '\n'
 ;
 //lo agregamos para ver si se solucionaba el problema de los saltos de linea pero no funciona
  
-saltoOpcional:  /* vacio */
+saltoOpcional:  /* vacío */
+				| '\n' saltoOpcional
 				| '\n'
 ;
-definicionFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametros')' '{' listadoDeSentencias '}' ';' {printf("Se ha definido una funcion de tipo %s llamada %s \n",$<cadena>1,$<cadena>2);}
+
+definicionFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametros')' saltoOpcional '{' listadoDeSentencias '}' ';' {printf("Se ha definido una funcion de tipo %s llamada %s \n",$<cadena>1,$<cadena>2);}
 ;
 
 listadoDeSentencias: /* vacio */
@@ -114,7 +117,7 @@ listadoDeSentencias: /* vacio */
 sentenciaDoWhile: DO '{' listadoDeSentencias '}' WHILE '(' exp ')' ';' {printf( "Se ha declarado una sentencia do-while \n");}
 
 ;
-sentenciaFor:	FOR  '(' sentenciaDecOAsig  expC ';' incrementoParaFor ')' '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
+sentenciaFor:	FOR  '(' sentenciaDecOAsig  expC ';' incrementoParaFor ')' saltoOpcional '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
 
 ;
 
@@ -133,19 +136,19 @@ incrementoDecremento: IDENTIFICADOR MAS_MAS ';'  		 {printf("Se ha incrementado 
 ;
 
 
-sentenciaIfElse: IF '(' exp ')' '{' listadoDeSentencias '}' {printf ("Se declaro un if \n");} sentenciaElse
+sentenciaIfElse: IF '(' exp ')' saltoOpcional '{' listadoDeSentencias '}' {printf ("Se declaro un if \n");} sentenciaElse
 ;
 
 sentenciaElse: 	/* vacío */
-				| ELSE '{' listadoDeSentencias '}' {printf ("Se declaron un else \n");}
+				| ELSE saltoOpcional '{' listadoDeSentencias '}' {printf ("Se declaron un else \n");}
 ;
 
-sentenciaWhile: WHILE '(' exp ')' '\n' '{'  listadoDeSentencias '}' {printf ("Se declaro un while \n");}
+sentenciaWhile: WHILE '(' exp ')' saltoOpcional '{'  listadoDeSentencias '}' {printf ("Se declaro un while \n");}
 
 ;
 
 sentenciaSwitch: /* vacío */
-				| SWITCH '(' exp ')' '{' sentenciaCase '}' {printf ("Se declaro un switch \n");}
+				| SWITCH '(' exp ')' saltoOpcional '{' sentenciaCase '}' {printf ("Se declaro un switch \n");}
 
 ;
 
@@ -181,7 +184,6 @@ sentenciaAsignacion: parametro '=' exp ';'  {printf ("Se le asigno  %s y se le a
 					|parametro POR_IGUAL exp ';'   {printf ("Se le asigno  %s y se le asigno su valor por %s \n",$<cadena>1,$<cadena>3);}
 					|parametro DIVIDIDO_IGUAL exp ';'  {printf ("Se le asigno  %s y se le asigno su valor dividido %s \n",$<cadena>1,$<cadena>3);}
 					
-
 ;
 
 parametro:	 TIPO_DATO IDENTIFICADOR

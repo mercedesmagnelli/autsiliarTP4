@@ -438,10 +438,16 @@ char *yytext;
 #line 1 "../src/tp4.l"
 #define INITIAL 0
 #line 2 "../src/tp4.l"
+
+  
 #include "tp4.tab.h"
 #include <string.h>
 #include <stdlib.h>
-#line 445 "lex.yy.c"
+
+
+
+
+#line 451 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -592,10 +598,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 8 "../src/tp4.l"
+#line 14 "../src/tp4.l"
 
 
-#line 599 "lex.yy.c"
+#line 605 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -680,255 +686,255 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 10 "../src/tp4.l"
+#line 16 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return MAS_IGUAL;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 11 "../src/tp4.l"
+#line 17 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return MENOS_IGUAL;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 12 "../src/tp4.l"
+#line 18 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return POR_IGUAL;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 13 "../src/tp4.l"
+#line 19 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return DIVIDIDO_IGUAL;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 14 "../src/tp4.l"
+#line 20 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return NUM; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 15 "../src/tp4.l"
+#line 21 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return NUM_R; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 16 "../src/tp4.l"
+#line 22 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return WHILE;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 17 "../src/tp4.l"
+#line 23 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return DO;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 18 "../src/tp4.l"
+#line 24 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return CASE;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 19 "../src/tp4.l"
+#line 25 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return BREAK;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 20 "../src/tp4.l"
+#line 26 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return DEFAULT;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 21 "../src/tp4.l"
+#line 27 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return FOR;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 22 "../src/tp4.l"
+#line 28 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return SWITCH;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 23 "../src/tp4.l"
+#line 29 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return IF;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 24 "../src/tp4.l"
+#line 30 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return ELSE;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 25 "../src/tp4.l"
+#line 31 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return RETURN;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 26 "../src/tp4.l"
+#line 32 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return TIPO_DATO; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 27 "../src/tp4.l"
+#line 33 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return CHAR;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 28 "../src/tp4.l"
+#line 34 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return IDENTIFICADOR; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 29 "../src/tp4.l"
+#line 35 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return MAYOR_IGUAL;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 30 "../src/tp4.l"
+#line 36 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return MENOR_IGUAL;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 31 "../src/tp4.l"
+#line 37 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return IGUALDAD;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 32 "../src/tp4.l"
+#line 38 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return AND;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 33 "../src/tp4.l"
+#line 39 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return OR;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 34 "../src/tp4.l"
+#line 40 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return DESIGUALDAD;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 35 "../src/tp4.l"
+#line 41 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return  LITERAL_CADENA;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 36 "../src/tp4.l"
+#line 42 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return  MAS_MAS;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 37 "../src/tp4.l"
+#line 43 "../src/tp4.l"
 { strcpy(yylval.cadena, yytext); return  MENOS_MENOS;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 38 "../src/tp4.l"
+#line 44 "../src/tp4.l"
 { return ','; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 39 "../src/tp4.l"
+#line 45 "../src/tp4.l"
 { return '='; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 40 "../src/tp4.l"
+#line 46 "../src/tp4.l"
 { return ';'; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 41 "../src/tp4.l"
+#line 47 "../src/tp4.l"
 { return '+'; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 42 "../src/tp4.l"
+#line 48 "../src/tp4.l"
 { return '-'; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 43 "../src/tp4.l"
+#line 49 "../src/tp4.l"
 { return '*'; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 44 "../src/tp4.l"
+#line 50 "../src/tp4.l"
 { return '/'; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 45 "../src/tp4.l"
+#line 51 "../src/tp4.l"
 { return '%'; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 46 "../src/tp4.l"
+#line 52 "../src/tp4.l"
 { return ')'; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 47 "../src/tp4.l"
+#line 53 "../src/tp4.l"
 { return '('; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 48 "../src/tp4.l"
+#line 54 "../src/tp4.l"
 { return '{'; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 49 "../src/tp4.l"
+#line 55 "../src/tp4.l"
 { return '}'; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 50 "../src/tp4.l"
+#line 56 "../src/tp4.l"
 { return '['; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 51 "../src/tp4.l"
+#line 57 "../src/tp4.l"
 { return ']'; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 52 "../src/tp4.l"
+#line 58 "../src/tp4.l"
 { return '&'; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 53 "../src/tp4.l"
+#line 59 "../src/tp4.l"
 { return '|'; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 54 "../src/tp4.l"
+#line 60 "../src/tp4.l"
 { return '<'; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 55 "../src/tp4.l"
+#line 61 "../src/tp4.l"
 { return '>'; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 56 "../src/tp4.l"
+#line 62 "../src/tp4.l"
 { return '!'; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 57 "../src/tp4.l"
+#line 63 "../src/tp4.l"
 { return ':'; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 58 "../src/tp4.l"
+#line 64 "../src/tp4.l"
 { return '\n';}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 61 "../src/tp4.l"
+#line 67 "../src/tp4.l"
 ECHO;
 	YY_BREAK
-#line 932 "lex.yy.c"
+#line 938 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1814,5 +1820,6 @@ int main()
 	return 0;
 	}
 #endif
-#line 61 "../src/tp4.l"
+#line 67 "../src/tp4.l"
+
 

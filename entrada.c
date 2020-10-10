@@ -1,6 +1,3 @@
-
-
-while( a > 5)
-{
-    a++;
+while(a>4){
+    int x;
 }
