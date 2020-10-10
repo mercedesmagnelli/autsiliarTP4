@@ -159,7 +159,7 @@ sentenciaCase:  /* vacío */
 ;
 
 sentenciaReturn: /* vacío */
-				|RETURN exp ';' {printf ("Se declaro un return");}
+				|RETURN exp ';' {printf ("Se declaro un return \n ");}
 ;
 
 listadoDeSentenciasDeDeclaracion:	/* vacío */
