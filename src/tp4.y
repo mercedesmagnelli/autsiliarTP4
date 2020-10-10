@@ -72,7 +72,7 @@ char cadena[50];
 
 %%
 
-/* f */
+
 
 input:    /* vacío */
         | input line
