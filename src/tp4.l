@@ -4,10 +4,6 @@
 #include "tp4.tab.h"
 #include <string.h>
 #include <stdlib.h>
-
-
-
-
 %}
 
 
