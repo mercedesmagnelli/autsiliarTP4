@@ -9,7 +9,7 @@
 
 
 	void yyerror (char const *s) {
-  		 fprintf(stderr, "hay un error \n", s);
+  		 fprintf(stderr, "hay un error en la línea %d = %s \n", lineno, s);
 	}
 
 	int yylex();
