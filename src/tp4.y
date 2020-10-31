@@ -137,6 +137,7 @@ incrementoDecremento: IDENTIFICADOR MAS_MAS ';'  		 {printf("Se ha incrementado 
 
 
 sentenciaIfElse: IF '(' exp ')' saltoOpcional '{' listadoDeSentencias '}' {printf ("Se declaro un if \n");} sentenciaElse
+		| error saltoOpcional { yyerrok; }
 ;
 
 sentenciaElse: 	/* vacío */
@@ -158,7 +159,7 @@ sentenciaCase:  /* vacío */
 ;
 
 sentenciaReturn: /* vacío */
-				|RETURN exp ';' {printf ("Se declaro un return");}
+				|RETURN exp ';' {printf ("Se declaro un return \n ");}
 ;
 
 listadoDeSentenciasDeDeclaracion:	/* vacío */
