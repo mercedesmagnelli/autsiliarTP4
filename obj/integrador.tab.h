@@ -80,11 +80,11 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 25 "../src/integrador.y"
+#line 27 "../src/integrador.y"
 
 	struct{
 		char cadena[50];
-		int tipo;// 0 = int, 1 = char*, 2 = numero, 3 = void
+		int tipo;// char=0,int=1, float=2, double=3, void=4 ,char*=5
 		float numero;
 	}s;
 

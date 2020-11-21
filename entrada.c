@@ -1,3 +1,2 @@
-while(a>4){
-    int x
-}
+int a; 
+int b;

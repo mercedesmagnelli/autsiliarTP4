@@ -9,6 +9,7 @@
 	#include "tablaDeSimbolos.c"
 	#define YYERROR_VERBOSE
 	extern FILE* yyin; 
+	extern FILE* yyout;
 	int my_line=1;
 	
 	// el mensaje muestre la línea en la que está el error
@@ -78,26 +79,8 @@
 
 
 %%
-/* 
-desarrollo funciones --- afuera d todo // tiposPar id (tipoP idP ...){lo que hace}
-invocacion solo va dentro de otras estructuras/funciones // id(cantParamretros)
-prototipo tmb tiene que ir separado del resto // tipo id (tiposPar....)
 
-
-chequeos semanticos en relacion a las funciones: 
-
-	- la funcion exista (ya este declarada con el mismo id y la misma cant de parametros)
-	- la cantidad de parametros es la correcta
-
-
- */
-
-
-
-
-
-
-input:    /* vacío */ {}
+input:    /* vacío */ 
         | input line
 		| ERROR_LEXICO { agregarErrorLexico($<s.cadena>1);}
 ;
@@ -117,7 +100,6 @@ line:
 		| incrementoDecremento saltoOpcional
 		| error saltoOpcional { yyerrok;}
 ;
-//lo agregamos para ver si se solucionaba el problema de los saltos de linea pero no funciona
 
 
 saltoOpcional:  /* vacío */ {}
@@ -131,7 +113,7 @@ invocacionFuncion: IDENTIFICADOR '(' listaParametrosInvocacion ')' ';'  {/*verif
 
 
 
-listadoDeSentencias: /* vacio */ {}
+listadoDeSentencias: /* vacio */ 
 					| sentenciaSwitch listadoDeSentencias 
 					| sentenciaDoWhile listadoDeSentencias
 					| sentenciaFor listadoDeSentencias
@@ -148,7 +130,6 @@ sentenciaDoWhile: DO saltoOpcional '{' listadoDeSentencias '}' WHILE '(' exp ')'
 
 ;
 sentenciaFor:	FOR  '(' sentenciaDecOAsig  expC ';' incrementoParaFor ')' saltoOpcional '{' listadoDeSentencias '}'  {printf("Se ha declarado una sentencia for\n");}
-
 ;
 
 sentenciaDecOAsig: sentenciaAsignacion
@@ -157,7 +138,7 @@ sentenciaDecOAsig: sentenciaAsignacion
 
 
 incrementoParaFor: IDENTIFICADOR MAS_MAS       {printf("Se ha incrementado la variable %s \n",$<s.cadena>1);}
-				  |	IDENTIFICADOR MENOS_MENOS  {printf("Se ha decrementado la variable %s\n",$<s.cadena>1);}
+				  |IDENTIFICADOR MENOS_MENOS  {printf("Se ha decrementado la variable %s\n",$<s.cadena>1);}
 ;
 
 
@@ -167,10 +148,10 @@ incrementoDecremento: IDENTIFICADOR MAS_MAS ';'  		 {printf("Se ha incrementado 
 
 
 sentenciaIfElse: IF '(' exp ')' saltoOpcional '{' listadoDeSentencias '}' {printf ("Se declaro un if \n");} sentenciaElse
-		| error saltoOpcional { yyerrok; }
+				| error saltoOpcional { yyerrok; }
 ;
 
-sentenciaElse: 	/* vacío */ {}
+sentenciaElse: 	/* vacío */ 
 				| ELSE saltoOpcional '{' listadoDeSentencias '}' {printf ("Se declaron un else \n");}
 ;
 
@@ -178,38 +159,38 @@ sentenciaWhile: WHILE '(' exp ')' saltoOpcional '{'  listadoDeSentencias '}' {pr
 
 ;
 
-sentenciaSwitch: /* vacío */ {}
+sentenciaSwitch: /* vacío */ 
 				| SWITCH '(' exp ')' saltoOpcional '{' sentenciaCase '}' {printf ("Se declaro un switch \n");}
 
 ;
 
-sentenciaCase:  /* vacío */ {}
+sentenciaCase:  /* vacío */ 
 				| CASE exp ':' listadoDeSentencias BREAK ';' {printf ("Se declaro un case \n");}
 				| sentenciaCase DEFAULT ':' listadoDeSentencias {printf ("Se declaro el default \n");}
 ;
 
-sentenciaReturn: /* vacío */ {}
+sentenciaReturn: /* vacío */ 
 				|RETURN exp ';' {printf ("Se declaro un return \n ");}
 ;
 
-listadoDeSentenciasDeDeclaracion:	/* vacío */ {}
+listadoDeSentenciasDeDeclaracion:	/* vacío */ 
 									| sentenciaDeclaracion
 									| sentenciaDeclaracion ';' listadoDeSentenciasDeDeclaracion 
 ;
 
-sentenciaDeclaracion: 	TIPO_DATO IDENTIFICADOR ';'				 					 { agregarIdentificador($<s.cadena>2, $<s.tipo>1)} 
+sentenciaDeclaracion: 	TIPO_DATO IDENTIFICADOR ';'				 					 {printf("entra por la gramatica de la linea 181");agregarIdentificador($<s.cadena>2, $<s.tipo>1);} 
 						| TIPO_DATO listaIdentificadores  ';'	    
-						| TIPO_DATO IDENTIFICADOR '[' expC ']' ';'  				 {agregarIdentificador($<s.cadena>2, $<s.tipo>1)}
-						| TIPO_DATO IDENTIFICADOR '[' expC ']' '=' '{' auxi '}' ';'  {agregarIdentificador($<s.cadena>2, $<s.tipo>1)}
-						| TIPO_DATO '*' IDENTIFICADOR ';'          				     {agregarIdentificador($<s.cadena>2, $<s.tipo>1)}
+						| TIPO_DATO IDENTIFICADOR '[' expC ']' ';'  				 {agregarIdentificador($<s.cadena>2, $<s.tipo>1);}
+						| TIPO_DATO IDENTIFICADOR '[' expC ']' '=' '{' auxi '}' ';'  {agregarIdentificador($<s.cadena>2, $<s.tipo>1);}
+						| TIPO_DATO '*' IDENTIFICADOR ';'          				     {agregarIdentificador($<s.cadena>2, $<s.tipo>1);}
 						| error saltoOpcional { yyerrok; }
 ; 
 
 
-desarrolloFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametrosFuncion ')'  saltoOpcional '{' listadoDeSentencias '}' ';'    {	}
+desarrolloFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametrosFuncion ')'  saltoOpcional '{' listadoDeSentencias '}' ';'  
 ;
 
-prototipoFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametrosPrototipo ')' ';'    {	}
+prototipoFuncion: TIPO_DATO IDENTIFICADOR '(' listaParametrosPrototipo ')' ';'  
 ;
 
 
@@ -217,55 +198,54 @@ auxi: expC ',' auxi
 	| expC 
 ;
 
-sentenciaAsignacion: parametro '=' exp ';'  			 {if(flag()){printf("y se le asigno %s \n ",$<s.cadena>3)}else{bajarFlag()};} 
-					|parametro MAS_IGUAL exp ';'		 {if(flag()){printf("y se le asigno el mismo mas %s \n",$<s.cadena>3)}else{bajarFlag()};} 
-					|parametro MENOS_IGUAL exp ';'  	 {if(flag()){printf("y se le asigno el mismo menos %s \n",$<s.cadena>3)}else{bajarFlag()};} 
-					|parametro POR_IGUAL exp ';'    	 {if(flag()){printf("y se le asigno el mismo por %s \n",$<s.cadena>3)}else{bajarFlag()};} 
-					|parametro DIVIDIDO_IGUAL exp ';'    {if(flag()){printf("y se le asigno el mismo dividido por %s \n",$<s.cadena>3)}else{bajarFlag()};} 
+sentenciaAsignacion: parametro '=' exp ';'  			 {if(flag()){printf("y se le asigno %s \n ",$<s.cadena>3);}else{bajarFlag();}} 
+					|parametro MAS_IGUAL exp ';'		 {if(flag()){printf("y se le asigno el mismo mas %s \n",$<s.cadena>3);}else{bajarFlag();}} 
+					|parametro MENOS_IGUAL exp ';'  	 {if(flag()){printf("y se le asigno el mismo menos %s \n",$<s.cadena>3);}else{bajarFlag();}} 
+					|parametro POR_IGUAL exp ';'    	 {if(flag()){printf("y se le asigno el mismo por %s \n",$<s.cadena>3);}else{bajarFlag();}} 
+					|parametro DIVIDIDO_IGUAL exp ';'    {if(flag()){printf("y se le asigno el mismo dividido por %s \n",$<s.cadena>3);}else{bajarFlag();}} 
 ;
 
 parametro:	 TIPO_DATO IDENTIFICADOR  					{agregarIdentificador($<s.cadena>2,$<s.tipo>1);printf("Se declaro  %s del tipo %s y se le asigno ",$<s.cadena>2,$<s.cadena>1);}
-			| IDENTIFICADOR 	      					{if(idYaSeDeclaro($<s.cadena>1)!=NULL){printf ("Se le asigno a %s y se le asigno ",$<s.cadena>1);}else{agregar a error semantico;levantarFlag();}}
+			| IDENTIFICADOR 	      					{if(idYaSeDeclaro($<s.cadena>1)!=NULL){printf ("Se le asigno a %s y se le asigno ",$<s.cadena>1);}/* else{agregar a error semantico;levantarFlag();} */}
 
 ;
 
 
 
-listaIdentificadores: 	  identificadorA   
-						| listaIdentificadores ',' identificadorA 
-						
+listaIdentificadores: identificadorA   
+						| listaIdentificadores ',' identificadorA 					
 ;
 
-identificadorA:		 IDENTIFICADOR 				    	{agregarIdentificador($<s.cadena>1,mostrarUltimoDato())} 
-					|IDENTIFICADOR '=' exp			    {agregarIdentificador($<s.cadena>1,mostrarUltimoDato())} 
-					|IDENTIFICADOR MAS_IGUAL exp 		{agregarIdentificador($<s.cadena>1,mostrarUltimoDato())}
-					|IDENTIFICADOR MENOS_IGUAL exp  	{agregarIdentificador($<s.cadena>1,mostrarUltimoDato())}
-					|IDENTIFICADOR POR_IGUAL exp  		{agregarIdentificador($<s.cadena>1,mostrarUltimoDato())}
-					|IDENTIFICADOR DIVIDIDO_IGUAL exp  	{agregarIdentificador($<s.cadena>1,mostrarUltimoDato())}
+identificadorA:		IDENTIFICADOR 				    	{agregarIdentificador($<s.cadena>1,mostrarUltimoDato());} 
+					|IDENTIFICADOR '=' exp			    {agregarIdentificador($<s.cadena>1,mostrarUltimoDato());} 
+					|IDENTIFICADOR MAS_IGUAL exp 		{agregarIdentificador($<s.cadena>1,mostrarUltimoDato());}
+					|IDENTIFICADOR MENOS_IGUAL exp  	{agregarIdentificador($<s.cadena>1,mostrarUltimoDato());}
+					|IDENTIFICADOR POR_IGUAL exp  		{agregarIdentificador($<s.cadena>1,mostrarUltimoDato());}
+					|IDENTIFICADOR DIVIDIDO_IGUAL exp  	{agregarIdentificador($<s.cadena>1,mostrarUltimoDato());}
 
 ;
 
-listaParametrosPrototipo:  	/* vacio */ {}
-							| TIPO_DATO 							 {agregarParametro($<s.tipo>1)}
-							| TIPO_DATO ',' listaParametrosPrototipo {agregarParametro($<s.tipo>1)}
+listaParametrosPrototipo:  	/* vacio */ 
+							| TIPO_DATO 							 {agregarParametro($<s.tipo>1);}
+							| TIPO_DATO ',' listaParametrosPrototipo {agregarParametro($<s.tipo>1);}
 							| listaParametrosFuncion
 ;
 
 
 
-listaParametrosFuncion: 	/* vacio */ {}
-							|TIPO_DATO IDENTIFICADOR							{agregarParametro($<s.tipo>1)}
-							|TIPO_DATO IDENTIFICADOR ',' listaParametrosFuncion	{agregarParametro($<s.tipo>1)} //AREGLAR CON LO Q DIJO JUAN
+listaParametrosFuncion: 	/* vacio */ 
+							|TIPO_DATO IDENTIFICADOR							{agregarParametro($<s.tipo>1);}
+							|TIPO_DATO IDENTIFICADOR ',' listaParametrosFuncion	{agregarParametro($<s.tipo>1);} //AREGLAR CON LO Q DIJO JUAN
 
 ;
 
-listaParametrosInvocacion: /* vacio */ {}
+listaParametrosInvocacion: /* vacio */ 
 				    	  | noTerminal ',' listaParametrosInvocacion 
 						  | noTerminal
 
 ;
 
-noTerminal: IDENTIFICADOR 							{int tipo=$<s.buscarTipo(cadena>1);if(tipo>=0){agregarParametro(tipo);}else{}}
+noTerminal: IDENTIFICADOR 							{int tipo=buscarTipo($<s.cadena>1);if(tipo>=0){agregarParametro(tipo);}/* else{} */}
 			| CHAR 									{agregarParametro($<s.tipo>1);}
 			| DECIMAL 								{agregarParametro($<s.tipo>1);}
 			| HEXA    								{agregarParametro($<s.tipo>1);}
@@ -322,13 +302,16 @@ int main ()
 {
 
 	yyin=fopen("entrada.c","r");
-   	yyparse();
+   	printf("pruebaPreParse");
+	yyparse();
  	#ifdef BISON_DEBUG
         yydebug = 1;
 	#endif
+	printf("prueba");
+	generarReporte();
+	printf("otraPrueba");
 	fclose(yyin);
-	system("pause");
-	//generarReporte();
+	system("pause");	
 	return 0;
 
 }

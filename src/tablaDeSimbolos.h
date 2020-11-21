@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int ultimoTDato;
+//int ultimoTDato;
 
 struct nodoIdentificadores{
     int cantidad; // este nos sirve para controlar la repetición
@@ -20,8 +20,6 @@ struct parametros {
     struct parametros* next;
 };
 typedef struct parametros NodoParametrosFuncion;
-
-
 
 struct nodoFuncion{
   char* identificador;                      //IDENTIFICADOR
@@ -103,20 +101,35 @@ int cantidadNodos(NodoParametrosFuncion*);
 
 int idEncontrado(NodoId*,char* id);
 
-int sonOperables(char*);
+int esOperable(char* id);
 
-int buscarTipo(char*); 
+int buscarTipo(char* id); 
 
 void verificaFuncion(char*);
 
-void verificarTiposDeParametros(char*,NodoParametrosFuncion*,NodoParametrosFuncion*);
+void verificarTiposDeParametro(NodoFuncion* auxiliar, NodoParametrosFuncion * listaParametros, NodoParametrosFuncion* raizParametro);
 
 NodoId* idYaSeDeclaro(char*);
 
-int calcularTipo(char*, int);
+int calcularTipo(char* potencialId, int tipoOriginal);
 
 void agregarErrorFuncionInvocacion(char*,int);
 
-int sonOperables(char*);
+void funcionesCorrectamenteDeclaradas();
+
+char* tipoRepresentado(int enNumero);
+
+int sonOperablesODelMismoTipo(int unTipo, int otroTipo);
+
+void levantarFlag();
+
+void bajarFlag();
+
+int flag();
+
+void invocacionesIncorrectas();
+
+void variablesCorrectamenteDeclaradas();
+void funcionDePrueba();
 
 #endif
