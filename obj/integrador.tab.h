@@ -44,29 +44,32 @@
      ELSE = 260,
      RETURN = 261,
      SWITCH = 262,
-     NUM = 263,
-     NUM_R = 264,
-     IDENTIFICADOR = 265,
-     TIPO_DATO = 266,
-     DO = 267,
-     WHILE = 268,
-     CHAR = 269,
-     LITERAL_CADENA = 270,
-     MAYOR_IGUAL = 271,
-     MENOR_IGUAL = 272,
-     IGUALDAD = 273,
-     AND = 274,
-     OR = 275,
-     DESIGUALDAD = 276,
-     CASE = 277,
-     BREAK = 278,
-     DEFAULT = 279,
-     MAS_IGUAL = 280,
-     MENOS_IGUAL = 281,
-     POR_IGUAL = 282,
-     DIVIDIDO_IGUAL = 283,
-     MAS_MAS = 284,
-     MENOS_MENOS = 285
+     DECIMAL = 263,
+     HEXA = 264,
+     OCTAL = 265,
+     NUM_R = 266,
+     IDENTIFICADOR = 267,
+     TIPO_DATO = 268,
+     DO = 269,
+     WHILE = 270,
+     CHAR = 271,
+     LITERAL_CADENA = 272,
+     MAYOR_IGUAL = 273,
+     MENOR_IGUAL = 274,
+     IGUALDAD = 275,
+     AND = 276,
+     OR = 277,
+     DESIGUALDAD = 278,
+     CASE = 279,
+     BREAK = 280,
+     DEFAULT = 281,
+     MAS_IGUAL = 282,
+     MENOS_IGUAL = 283,
+     POR_IGUAL = 284,
+     DIVIDIDO_IGUAL = 285,
+     MAS_MAS = 286,
+     MENOS_MENOS = 287,
+     ERROR_LEXICO = 288
    };
 #endif
 
@@ -77,14 +80,18 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 27 "../src/tp4.y"
+#line 25 "../src/integrador.y"
 
-char cadena[50];
+	struct{
+		char cadena[50];
+		int tipo;// 0 = int, 1 = char*, 2 = numero, 3 = void
+		float numero;
+	}s;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 88 "tp4.tab.h"
+#line 95 "integrador.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
